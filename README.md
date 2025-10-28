@@ -2,7 +2,7 @@
 
 **[[Project Page](https://ss47816.github.io/AGI-Elo/)] [[HuggingFace](https://huggingface.co/collections/ztony0712/agi-elo-6825d88e9587700e9dd41b12)] [[Preprint](https://arxiv.org/abs/2505.12844)] [[Code](https://github.com/SS47816/AGI-Elo)] [[Raw Data](https://drive.google.com/drive/folders/1Wpgeh6_FH-DRiPPVqbJYI3wTGNB4lbwk?usp=sharing)]**
 
-## AGI-Elo: How Far Are We From Mastering A Task?
+## [NeurIPS 2025] AGI-Elo: How Far Are We From Mastering A Task?
 
 <!-- #### Quantifying Progress Toward Task Mastery with Elo Ratings -->
 
@@ -20,36 +20,7 @@ _<sup>3</sup>Singapore MIT Alliance for Research and Technology_
 <!-- ![Alt text](media/agi-elo.png) -->
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center">
-         <img src="media/ImageNet.png" width="220px"><br/>
-         <sub><b>ImageNet</sub>
-      </td>
-      <td align="center">
-         <img src="media/MMLU.png" width="220px"><br/>
-         <sub><b>MMLU</sub>
-      </td>
-      <td align="center">
-         <img src="media/Waymo.png" width="220px"><br/>
-         <sub><b>Waymo</sub>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-         <img src="media/COCO.png" width="220px"><br/>
-         <sub><b>COCO</sub>
-      </td>
-      <td align="center">
-         <img src="media/LiveCodeBench.png" width="220px"><br/>
-         <sub><b>LiveCodeBench</sub>
-      </td>
-      <td align="center">
-         <img src="media/NAVSIM.png" width="220px"><br/>
-         <sub><b>NAVSIM</sub>
-      </td>
-    </tr>
-  </table>
+  <img src="media/NIPS_poster.png" width="100%" alt="AGI-Elo NIPS poster" />
 </div>
 
 
