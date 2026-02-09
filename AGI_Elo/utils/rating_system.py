@@ -47,7 +47,7 @@ def convert_prediction_to_match_results(prediction_result_folder: Path, match_re
 
 def compute_ratings(match_result_folder: Path, rating_result_folder: Path, dataset_name: str, metric_name: str, dataset_folder: Path=None,
                     num_rounds_list: list=[1], method: str='Glicko', init_mu: int=1500, init_rd: int=350,
-                    bin_size: int=100, left_margin: int=400, min_rating_diff: int=-1250, max_rating_diff: int=1250, record: bool=True) -> None:
+                    bin_size: int=100, left_margin: int=400, min_rating_diff: int=-1250, max_rating_diff: int=1250, record: bool=True, draw_status: bool=False) -> None:
     # Load all .pkl files and concatenate all DataFrames
     pkl_files = sorted(match_result_folder.glob("*.pkl"))
     dfs = [pd.read_pickle(file) for file in pkl_files]
@@ -132,7 +132,7 @@ def compute_ratings(match_result_folder: Path, rating_result_folder: Path, datas
 
         # Visualize the Ratings
         rating_figure_path = rating_result_folder.joinpath(f"{dataset_name}_{metric_name}_dist_{method}_{i + 1}.pdf")
-        plot_ratings(test_case_ratings_path, model_ratings_path, rating_figure_path, dataset_name, show_plot=False, bin_size=bin_size, left_margin=left_margin)
+        plot_ratings(test_case_ratings_path, model_ratings_path, rating_figure_path, dataset_name, show_plot=False, bin_size=bin_size, left_margin=left_margin,draw_model_stats=draw_status)
         if dataset_folder is not None:
             sample_figure_path = rating_result_folder.joinpath(f"{dataset_name}_{metric_name}_sample_{method}_{i + 1}.pdf")
             plot_samples(dataset_folder, test_case_ratings_path, sample_figure_path, num_samples_per_bin=3)

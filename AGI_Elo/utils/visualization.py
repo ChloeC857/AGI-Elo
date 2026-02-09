@@ -8,7 +8,7 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap, Normalize, TwoSlopeNorm
 
 
-def plot_ratings(test_case_ratings_path: Path, model_ratings_path: Path, figure_path: Path, dataset_name: str, show_plot: bool=False, bin_size: int=50, left_margin: int=200, right_margin: int=100) -> None:
+def plot_ratings(test_case_ratings_path: Path, model_ratings_path: Path, figure_path: Path, dataset_name: str, show_plot: bool=False, bin_size: int=50, left_margin: int=200, right_margin: int=100, draw_model_stats: bool=False) -> None:
     # Load Ratings
     test_cases_df = pd.read_pickle(test_case_ratings_path)
     models_df = pd.read_pickle(model_ratings_path)
@@ -37,11 +37,22 @@ def plot_ratings(test_case_ratings_path: Path, model_ratings_path: Path, figure_
     norm = Normalize(vmin=rating_start, vmax=rating_end)
     bin_colors = [cmap(norm(center)) for center in bin_centers]
 
-    # Color for models
+    # Prepare model colors (original per-model markers)
     model_colors = cm.get_cmap('tab20', num_models).colors
-    custom_red_colors = ['#DC3971', '#EC719F', '#F3B3CC', '#ABE5E8', '#34ADAE']
+    custom_red_colors = ["#1B9E77", "#D95F02", "#7570B3", "#E7298A"]
     custom_cmap = LinearSegmentedColormap.from_list("custom_red", custom_red_colors)
     model_colors = [custom_cmap(i) for i in np.linspace(0, 1, num_models)]
+
+    # Prepare summary-stat colors and values (only used when draw_model_stats=True)
+    stat_colors = [custom_cmap(i) for i in np.linspace(0, 1, 4)]
+    model_ratings = pd.to_numeric(models_df["Rating"], errors="coerce").dropna().values
+    if model_ratings.size > 0:
+        model_min = float(np.min(model_ratings))
+        model_max = float(np.max(model_ratings))
+        model_mean = float(np.mean(model_ratings))
+        model_median = float(np.median(model_ratings))
+    else:
+        model_min = model_max = model_mean = model_median = float("nan")
 
     # Create plot
     fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -63,9 +74,20 @@ def plot_ratings(test_case_ratings_path: Path, model_ratings_path: Path, figure_
     ax2.set_ylabel("Cumulative Percentage", color=color_curve, fontsize=fontsize, fontweight='bold')
     ax2.tick_params(axis='y', labelcolor=color_curve, labelsize=fontsize)
 
-    # Vertical lines for Model Ratings
-    for name, rating, color in zip(models_df["Name"].values, models_df["Rating"].values, model_colors):
-        ax1.axvline(rating, color=color, linestyle='dashed', linewidth=2, label=name)
+    # Draw model markers: original per-model lines or summary-stat lines
+    if draw_model_stats:
+        if model_ratings.size > 0:
+            stat_lines = [
+                (model_min, "Model Min"),
+                (model_max, "Model Max"),
+                (model_median, "Model Median"),
+                (model_mean, "Model Mean"),
+            ]
+            for (value, label), color in zip(stat_lines, stat_colors):
+                ax1.axvline(value, color=color, linestyle="dashed", linewidth=2, label=label, zorder=3)
+    else:
+        for name, rating, color in zip(models_df["Name"].values, models_df["Rating"].values, model_colors):
+            ax1.axvline(rating, color=color, linestyle='dashed', linewidth=2, label=name)
 
     # Title & Legends
     # ax1.set_title(f"Model & Test Case Rating Distributions on {dataset_name}")
